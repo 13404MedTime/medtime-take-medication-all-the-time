@@ -1,0 +1,23 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: https://ofs.u-code.io
+functions:
+  madadio-take-medication-all-the-time:
+    lang: go
+    handler: ./madadio-take-medication-all-the-time
+    image: gitlab.udevs.io:5050/ucode_functions_group/madadio-take-medication-all-the-time/madadio-take-medication-all-the-time:latest
+    constraints:
+      - "workload=openfaas-fn"
+    environment:
+      sleep_duration: 10
+      read_timeout: "500s"
+      write_timeout: "500s"
+      exec_timeout: "500s"
+    annotations:
+      topic: cron-function
+      schedule: "* * * * *"    
+    limits:
+      memory: 300Mi
+    requests:
+      memory: 5Mi
